@@ -12,29 +12,29 @@ public class Main {
     private static long startTime;
 
     public static void main(String[] args) {
-        // Read input blocks from file
+        // Baca input blocks
         blocks = BlockInput.ReadInputFromFile();
         if (blocks == null) {
             System.out.println("Periksa file input.");
             return;
         }
 
-        // Initialize block coordinates and letters
+        // Ambil koordinat dari tiap blok
         blockCoordinates = new ArrayList<>();
         for (List<String> block : blocks) {
             blockCoordinates.add(BlockInput.BlockToCoordinates(block));
         }
 
-        // Initialize the matrix
+
         matrix = new TransformMatrix(BlockInput.M, BlockInput.N);
 
-        // Start the backtracking algorithm
-        startTime = System.currentTimeMillis(); // Record start time
+        // bruteforce
+        startTime = System.currentTimeMillis();
         solvePuzzle(0);
-        long endTime = System.currentTimeMillis(); // Record end time
-        long runtime = endTime - startTime; // Calculate runtime in milliseconds
+        long endTime = System.currentTimeMillis();
+        long runtime = endTime - startTime;
 
-        // Print the final matrix if a solution is found
+        // solusi ditemukan (print)
         if (solutionFound) {
             System.out.println("Solusi");
             System.out.println();
@@ -44,7 +44,7 @@ public class Main {
             System.out.println("Tidak ditemukan solusi.");
         }
 
-        // Print the number of iterations and runtime
+
         System.out.println("\nWaktu eksekusi: " + runtime + " ms\n");
         System.out.println("Banyak kasus yang ditinjau: " + iterations);
         Scanner saveScanner = new Scanner(System.in);
@@ -55,7 +55,7 @@ public class Main {
         if (userInput.equals("ya")) {
             System.out.print("Masukkan nama file untuk menyimpan solusi: ");
             String saveFilename = saveScanner.nextLine().trim();
-            matrix.saveMatrixToHTML(saveFilename + ".html");
+            matrix.saveMatrix(saveFilename + ".html");
         }
         else if (userInput.equals("tidak")) {
             System.out.println("Solusi tidak disimpan.");
@@ -64,11 +64,21 @@ public class Main {
         }
     }
 
+    private static boolean BoardFullCheck() {
+        for (int i = 0; i < matrix.rows; i++) {
+            for (int j = 0; j < matrix.cols; j++) {
+                if (matrix.matrix[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private static void solvePuzzle(int blockIndex) {
         if (blockIndex >= blockCoordinates.size()) {
-            // Check if the board is fully filled
-            if (isBoardFullyFilled()) {
-                solutionFound = true; // Solution is valid
+            if (BoardFullCheck()) {
+                solutionFound = true;
             }
             return;
         }
@@ -76,25 +86,23 @@ public class Main {
         List<int[]> currentBlock = blockCoordinates.get(blockIndex);
         char currentLetter = BlockInput.blockLetters.get(blockIndex);
 
-        // Try placing the block in every possible position and rotation
+        // Coba setiap posisi dan rotasi
         for (int rotation = 0; rotation < 4; rotation++) {
             List<int[]> rotatedBlock = Rotate.RotateBlocks(currentBlock, rotation);
 
             for (int x = 0; x < matrix.rows; x++) {
                 for (int y = 0; y < matrix.cols; y++) {
-                    iterations++; // Increment iteration counter
+                    iterations++;
                     if (matrix.BlockFitCheck(x, y, rotatedBlock)) {
-                        // Place the block
                         matrix.addBlock(x, y, rotatedBlock, currentLetter);
 
-                        // Recur for the next block
                         solvePuzzle(blockIndex + 1);
 
                         if (solutionFound) {
-                            return; // Stop if a valid solution is found
+                            return;
                         }
 
-                        // Backtrack: remove the block
+                        // backtrack jika gagal
                         matrix.eraseBlock(x, y, rotatedBlock);
                     }
                 }
@@ -102,15 +110,4 @@ public class Main {
         }
     }
 
-    // Check if the board is fully filled (no ' ' characters)
-    private static boolean isBoardFullyFilled() {
-        for (int i = 0; i < matrix.rows; i++) {
-            for (int j = 0; j < matrix.cols; j++) {
-                if (matrix.matrix[i][j] == ' ') {
-                    return false; // Found an empty space
-                }
-            }
-        }
-        return true; // Board is fully filled
-    }
 }

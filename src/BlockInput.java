@@ -16,7 +16,7 @@ public class BlockInput {
             "#7FFF00", "#D2691E", "#DC143C", "#FF8C00", "#8B008B", "#556B2F", "#9932CC", "#8B0000",
             "#E9967A", "#9400D3"
     };
-    public static final Map<Character, String> letterColors = new HashMap<>();
+    public static Map<Character, String> letterColors = new HashMap<>();
 
     public static List<List<String>> ReadInputFromFile() {
         Scanner inputScanner = new Scanner(System.in);
@@ -56,9 +56,9 @@ public class BlockInput {
 
             // Baca tipe
             if (fileScanner.hasNextLine()) {
-                String type = fileScanner.nextLine().trim();
-                if (!"STANDARD".equals(type)) {
-                    System.out.println("Error: Tipe harus merupakan 'STANDARD'.");
+                String type = fileScanner.nextLine().trim().toUpperCase();
+                if (!"DEFAULT".equals(type)) {
+                    System.out.println("Error: Tipe harus merupakan 'DEFAULT'.");
                     return null;
                 }
             } else {
@@ -74,7 +74,7 @@ public class BlockInput {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 if (!line.isEmpty()) {
-                    char firstChar = findFirstLetter(line);
+                    char firstChar = getLetter(line);
 
                     if (firstChar != currentLetter) {
                         if (currentBlock != null) {
@@ -85,9 +85,9 @@ public class BlockInput {
                         blockLetters.add(firstChar);
                         blockCount++;
 
-                        // Assign a unique color
+
                         if (!letterColors.containsKey(currentLetter)) {
-                            letterColors.put(currentLetter, COLORS[colorIndex % COLORS.length]);
+                            letterColors.put(currentLetter, COLORS[colorIndex]);
                             colorIndex++;
                         }
                     }
@@ -102,31 +102,22 @@ public class BlockInput {
 
             fileScanner.close();
 
-            System.out.println("Jumlah blok: " + blockCount);
 
             // Validasi jumlah blok
             if (blockCount != P) {
                 System.out.println("Error: Jumlah blok tidak sesuai dengan jumlah blok (" + P + ").");
                 return null;
             }
-
-//            // Print the letter-color mapping with colored letters
-//            System.out.println("Warna yang diberikan untuk setiap huruf:");
-//            for (Map.Entry<Character, String> entry : letterColors.entrySet()) {
-//                String colorCode = entry.getValue();
-//                String coloredLetter = getColoredText(entry.getKey().toString(), colorCode);
-//                System.out.println(coloredLetter);
-//            }
-
             return blocks;
+
         } catch (FileNotFoundException e) {
-            System.out.println("File tidak ditemukan: " + filePath);
+            System.out.println("File tidak ditemukan. Pastikan nama file ditambah dengan .txt");
         }
         return null;
     }
 
 
-    private static char findFirstLetter(String line) {
+    private static char getLetter(String line) {
         for (int i = 0; i < line.length(); i++) {
             if (line.charAt(i) != ' ') {
                 return line.charAt(i);

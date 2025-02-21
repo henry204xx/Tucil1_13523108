@@ -20,11 +20,11 @@ public class Rotate {
             rotated.add(new int[]{-coord[1], coord[0]});
         }
 
-        return NormalizeToZero(rotated);
+        return NormalizeCoordinates(rotated);
     }
 
     // Normalisasi koordinat agar mulai dari (0,0)
-    private static List<int[]> NormalizeToZero(List<int[]> block) {
+    private static List<int[]> NormalizeCoordinates(List<int[]> block) {
         int minX = Integer.MAX_VALUE, minY = Integer.MAX_VALUE;
 
         for (int[] coord : block) {
