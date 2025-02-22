@@ -45,6 +45,14 @@ public class BlockInput {
                     M = Integer.parseInt(numbers[0]);
                     N = Integer.parseInt(numbers[1]);
                     P = Integer.parseInt(numbers[2]);
+                    if (M <= 0 || N <= 0) {
+                        System.out.println("Error: Dimensi matriks harus lebih besar dari 0.");
+                        return null;
+                    }
+                    if (P <= 0 || P > 26) {
+                        System.out.println("Error: Jumlah blok harus antara 1-26.");
+                        return null;
+                    }
                 } catch (NumberFormatException e) {
                     System.out.println("Error: Baris pertama harus berisi 3 bilangan bulat.");
                     return null;

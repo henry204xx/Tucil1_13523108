@@ -2,6 +2,10 @@ import java.util.List;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.File;
 
 public class TransformMatrix {
     public char[][] matrix;
@@ -101,7 +105,11 @@ public class TransformMatrix {
                 for (int i = 0; i < rows; i++) {
                     for (int j = 0; j < cols; j++) {
                         char elmt = matrix[i][j];
-                        writer.write(elmt == ' ' ? ' ' : elmt);
+                        if (elmt == ' ') {
+                            writer.write(' ');
+                        } else {
+                            writer.write(elmt);
+                        }
                     }
                     if (i < rows-1) {
                         writer.write(System.lineSeparator());
@@ -118,49 +126,45 @@ public class TransformMatrix {
         }
     }
 
+    public void saveMatrixAsImage(String filename) {
+        int cellSize = 30;
+        int width = cols * cellSize;
+        int height = rows * cellSize;
 
-//
-//    public static void main(String[] args) {
-//        RemoveBlock game = new RemoveBlock(10, 10);
-//
-//        // Define different blocks
-//        List<int[]> blockL = List.of( // L-shape
-//                new int[]{0, 0},
-//                new int[]{1, 0},
-//                new int[]{2, 0},
-//                new int[]{2, 1}
-//        );
-//
-//        List<int[]> blockSquare = List.of( // Square block
-//                new int[]{0, 0}, new int[]{0, 1},
-//                new int[]{1, 0}, new int[]{1, 1}
-//        );
-//
-//        List<int[]> blockLine = List.of( // Horizontal line
-//                new int[]{0, 0}, new int[]{0, 1},
-//                new int[]{0, 2}, new int[]{0, 3}
-//        );
-//
-//        List<int[]> blockT = List.of( // T-shape
-//                new int[]{0, 0}, new int[]{0, 1}, new int[]{0, 2},
-//                new int[]{1, 1}
-//        );
-//
-//        System.out.println("Before placing blocks:");
-//        game.printMatrix();
-//
-//        // Place blocks with different symbols
-//        game.placeBlock(0, 0, blockL, 'L');
-//        game.placeBlock(4, 4, blockSquare, 'S');
-//        game.placeBlock(6, 2, blockLine, 'X');
-//        game.placeBlock(8, 6, blockT, 'T');
-//
-//        System.out.println("\nAfter placing blocks:");
-//        game.printMatrix();
-//
-//        // Remove the L-shape block
-//        game.eraseBlock(0, 0, blockL);
-//        System.out.println("\nAfter erasing L-block:");
-//        game.printMatrix();
-//    }
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D result = image.createGraphics();
+
+
+        result.setColor(Color.WHITE);
+        result.fillRect(0, 0, width, height);
+        result.setFont(new Font("Arial", Font.BOLD, cellSize - 5));
+        FontMetrics metrics = result.getFontMetrics();
+
+        // tulis matriks
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                char cell = matrix[i][j];
+                String hexColor = BlockInput.letterColors.getOrDefault(cell, "#000000");
+                Color textColor = Color.decode(hexColor);
+
+                result.setColor(textColor);
+
+                int x = j * cellSize + (cellSize - metrics.charWidth(cell)) / 2;
+                int y = (i + 1) * cellSize - (cellSize / 4);
+
+                result.drawString(String.valueOf(cell), x, y);
+            }
+        }
+
+        result.dispose();
+
+        // Save
+        try {
+            ImageIO.write(image, "png", new File(filename));
+            System.out.println("Matriks disimpan sebagai: " + filename);
+        } catch (IOException e) {
+            System.out.println("Error dalam menyimpan gambar");
+            e.printStackTrace();
+        }
+    }
 }

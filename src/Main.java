@@ -47,23 +47,51 @@ public class Main {
 
         System.out.println("\nWaktu eksekusi: " + runtime + " ms\n");
         System.out.println("Banyak kasus yang ditinjau: " + iterations);
+
         Scanner saveScanner = new Scanner(System.in);
-        System.out.print("Apakah anda ingin menyimpan solusi? (ya/tidak): ");
+        boolean userInputCorrect = false;
+        boolean userInputImgCorrect = false;
+        while (!userInputCorrect) {
+            System.out.print("Apakah anda ingin menyimpan solusi? (ya/tidak): ");
 
-        String userInput = saveScanner.nextLine().trim().toLowerCase();
+            String userInput = saveScanner.nextLine().trim().toLowerCase();
 
-        if (userInput.equals("ya")) {
-            System.out.print("Masukkan nama file untuk menyimpan solusi: ");
-            String saveFilename = saveScanner.nextLine().trim();
-            matrix.saveMatrix(saveFilename + ".txt", solutionFound);
+            if (userInput.equals("ya")) {
+                System.out.print("Masukkan nama file untuk menyimpan solusi: ");
+                String saveFilename = saveScanner.nextLine().trim();
+                matrix.saveMatrix(saveFilename + ".txt", solutionFound);
+                userInputCorrect = true;
 
-        }
+                //simpan gambar
+                if (solutionFound) {
+                    while (!userInputImgCorrect) {
+                        System.out.print("Apakah anda ingin menyimpan solusi sebagai gambar? (ya/tidak): ");
+                        String userInputImg = saveScanner.nextLine().trim().toLowerCase();
+
+                        if (userInputImg.equals("ya")) {
+                            System.out.print("Masukkan nama file untuk menyimpan solusi gambar: ");
+                            String saveFilenameImg = saveScanner.nextLine().trim();
+                            matrix.saveMatrixAsImage(saveFilenameImg + ".png");
+                            userInputImgCorrect = true;
+                        }
+
+                        else if (userInputImg.equals("tidak")) {
+                            System.out.println("Solusi tidak disimpan sebagai gambar.");
+                            userInputImgCorrect = true;
+                        } else {
+                            System.out.println("Input tidak valid. Harap masukkan 'ya' atau 'tidak'.");
+                        }
+                    }
+                }
+            }
+
         else if (userInput.equals("tidak")) {
             System.out.println("Solusi tidak disimpan.");
+            userInputCorrect = true;
         } else {
             System.out.println("Input tidak valid. Harap masukkan 'ya' atau 'tidak'.");
         }
-    }
+    } }
 
     private static boolean BoardFullCheck() {
         for (int i = 0; i < matrix.rows; i++) {
