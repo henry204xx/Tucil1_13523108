@@ -1,0 +1,2 @@
+Error: Tipe harus merupakan 'DEFAULT' atau 'PYRAMID'.
+Periksa file input.

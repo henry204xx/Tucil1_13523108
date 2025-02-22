@@ -1,0 +1,2 @@
+Error: Baris pertama harus berisi 3 bilangan bulat.
+Periksa file input.

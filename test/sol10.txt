@@ -1,0 +1,2 @@
+Error: File harus memiliki setidaknya dua baris.
+Periksa file input.

@@ -1,0 +1,2 @@
+Error: Dimensi matriks harus lebih besar dari 0.
+Periksa file input.
