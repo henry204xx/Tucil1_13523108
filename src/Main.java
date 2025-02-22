@@ -8,7 +8,7 @@ public class Main {
     private static List<List<String>> blocks;
     private static List<List<int[]>> blockCoordinates;
     private static boolean solutionFound = false;
-    private static int iterations = 0;
+    private static long iterations = 0;
     private static long startTime;
 
     public static void main(String[] args) {
