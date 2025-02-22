@@ -24,7 +24,7 @@ public class BlockInput {
 
         // Nama file
         System.out.print("Masukkan nama file: ");
-        String filePath = inputScanner.nextLine().trim();
+        String filePath = "../test/" + inputScanner.nextLine().trim();
 
         List<List<String>> blocks = new ArrayList<>();
 

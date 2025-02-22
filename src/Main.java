@@ -69,7 +69,7 @@ public class Main {
             //simpan txt
             if (userInput.equals("ya")) {
                 System.out.print("Masukkan nama file untuk menyimpan solusi: ");
-                String saveFilename = saveScanner.nextLine().trim();
+                String saveFilename = "../test/" + saveScanner.nextLine().trim();
                 if (BlockInput.Type.equals("DEFAULT")) {
                     matrix.saveMatrix(saveFilename + ".txt", puzzleSolved);
                 } else {
@@ -85,7 +85,7 @@ public class Main {
 
                         if (userInputImg.equals("ya")) {
                             System.out.print("Masukkan nama file untuk menyimpan solusi gambar: ");
-                            String saveFilenameImg = saveScanner.nextLine().trim();
+                            String saveFilenameImg = "../test/" + saveScanner.nextLine().trim();
                             if (BlockInput.Type.equals("DEFAULT")) {
                                 matrix.saveMatrixAsImage(saveFilenameImg + ".png");
                             } else {
