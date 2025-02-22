@@ -82,6 +82,10 @@ public class BlockInput {
             while (fileScanner.hasNextLine()) {
                 String line = fileScanner.nextLine();
                 if (!line.isEmpty()) {
+                    if (!validateCharacterInput(line)) {
+                        System.out.println("Error: Terdapat karakter yang tidak valid pada file. Hanya A-Z dan spasi yang diperbolehkan.");
+                        return null;
+                    }
                     char firstChar = getLetter(line);
 
                     if (firstChar != currentLetter) {
@@ -124,6 +128,15 @@ public class BlockInput {
         return null;
     }
 
+    private static boolean validateCharacterInput(String line) {
+        for (int i = 0; i < line.length(); i++) {
+            char ch = line.charAt(i);
+            if (ch != ' ' && (ch < 'A' || ch > 'Z')) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     private static char getLetter(String line) {
         for (int i = 0; i < line.length(); i++) {
