@@ -55,7 +55,8 @@ public class Main {
         if (userInput.equals("ya")) {
             System.out.print("Masukkan nama file untuk menyimpan solusi: ");
             String saveFilename = saveScanner.nextLine().trim();
-            matrix.saveMatrix(saveFilename + ".html");
+            matrix.saveMatrix(saveFilename + ".txt", solutionFound);
+
         }
         else if (userInput.equals("tidak")) {
             System.out.println("Solusi tidak disimpan.");

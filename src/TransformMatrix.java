@@ -95,28 +95,26 @@ public class TransformMatrix {
         }
     }
 
-    public void saveMatrix(String filename) {
+    public void saveMatrix(String filename, boolean solutionFound) {
         try (FileWriter writer = new FileWriter(filename)) {
-            writer.write("<html><body><pre style='font-size:15px;'>\n");
-
-            for (int i = 0; i < rows; i++) {
-                for (int j = 0; j < cols; j++) {
-                    char cell = matrix[i][j];
-                    String colorCode = BlockInput.letterColors.getOrDefault(cell, "#FFFFFF");
-
-                    if (cell == ' ') {
-                        writer.write("&nbsp;");
-                    } else {
-                        writer.write("<span style='color:" + colorCode + ";'>" + cell + "</span> ");
+            if (solutionFound) {
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < cols; j++) {
+                        char elmt = matrix[i][j];
+                        writer.write(elmt == ' ' ? ' ' : elmt);
+                    }
+                    if (i < rows-1) {
+                        writer.write(System.lineSeparator());
                     }
                 }
-                writer.write("<br>");
             }
-
-            writer.write("</pre></body></html>");
-            System.out.println("Matrix tersimpan sebagai: " + filename);
+            else {
+                writer.write("Tidak ada solusi");
+            }
+            System.out.println("Solusi disimpan sebagai: " + filename);
         } catch (IOException e) {
-            System.out.println("Error");
+            System.out.println("Error dalam menyimpan solusi");
+            e.printStackTrace();
         }
     }
 
