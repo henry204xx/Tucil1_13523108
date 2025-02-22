@@ -1,13 +1,12 @@
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Main {
 
+    private static Pyramid pyramid;
     private static TransformMatrix matrix;
     private static List<List<String>> blocks;
     private static List<List<int[]>> blockCoordinates;
-    private static boolean solutionFound = false;
+    private static boolean puzzleSolved = false;
     private static long iterations = 0;
     private static long startTime;
 
@@ -25,20 +24,31 @@ public class Main {
             blockCoordinates.add(BlockInput.BlockToCoordinates(block));
         }
 
-
+        pyramid = new Pyramid(BlockInput.M, BlockInput.N);
         matrix = new TransformMatrix(BlockInput.M, BlockInput.N);
 
         // bruteforce
         startTime = System.currentTimeMillis();
-        solvePuzzle(0);
+        if (BlockInput.Type.equals("DEFAULT")) {
+            solvePuzzle(0);
+        } else {
+            solvePuzzlePyramid(0);
+        }
+
         long endTime = System.currentTimeMillis();
         long runtime = endTime - startTime;
 
         // solusi ditemukan (print)
-        if (solutionFound) {
+        if (puzzleSolved) {
             System.out.println("Solusi");
             System.out.println();
-            matrix.printMatrix();
+
+            if (BlockInput.Type.equals("DEFAULT")) {
+                matrix.printMatrix();
+            } else {
+                pyramid.printPyramid();
+            }
+
 
         } else {
             System.out.println("Tidak ditemukan solusi.");
@@ -56,14 +66,19 @@ public class Main {
 
             String userInput = saveScanner.nextLine().trim().toLowerCase();
 
+            //simpan txt
             if (userInput.equals("ya")) {
                 System.out.print("Masukkan nama file untuk menyimpan solusi: ");
                 String saveFilename = saveScanner.nextLine().trim();
-                matrix.saveMatrix(saveFilename + ".txt", solutionFound);
+                if (BlockInput.Type.equals("DEFAULT")) {
+                    matrix.saveMatrix(saveFilename + ".txt", puzzleSolved);
+                } else {
+                    pyramid.savePyramidMatrix(saveFilename + ".txt", puzzleSolved);
+                }
                 userInputCorrect = true;
 
-                //simpan gambar
-                if (solutionFound) {
+                //simpan gambar (png)
+                if (puzzleSolved) {
                     while (!userInputImgCorrect) {
                         System.out.print("Apakah anda ingin menyimpan solusi sebagai gambar? (ya/tidak): ");
                         String userInputImg = saveScanner.nextLine().trim().toLowerCase();
@@ -71,7 +86,12 @@ public class Main {
                         if (userInputImg.equals("ya")) {
                             System.out.print("Masukkan nama file untuk menyimpan solusi gambar: ");
                             String saveFilenameImg = saveScanner.nextLine().trim();
-                            matrix.saveMatrixAsImage(saveFilenameImg + ".png");
+                            if (BlockInput.Type.equals("DEFAULT")) {
+                                matrix.saveMatrixAsImage(saveFilenameImg + ".png");
+                            } else {
+                                pyramid.savePyramidAsImage(saveFilenameImg + ".png");
+                            }
+
                             userInputImgCorrect = true;
                         }
 
@@ -104,10 +124,11 @@ public class Main {
         return true;
     }
 
+
     private static void solvePuzzle(int blockIndex) {
         if (blockIndex >= blockCoordinates.size()) {
             if (BoardFullCheck()) {
-                solutionFound = true;
+                puzzleSolved = true;
             }
             return;
         }
@@ -127,12 +148,49 @@ public class Main {
 
                         solvePuzzle(blockIndex + 1);
 
-                        if (solutionFound) {
+                        if (puzzleSolved) {
                             return;
                         }
 
                         // backtrack jika gagal
                         matrix.eraseBlock(x, y, rotatedBlock);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void solvePuzzlePyramid(int blockIndex) {
+        if (blockIndex >= blockCoordinates.size()) {
+            if (pyramid.PyramidFullCheck()) {
+                puzzleSolved = true;
+            }
+            return;
+        }
+
+        List<int[]> currentBlock = blockCoordinates.get(blockIndex);
+        char currentLetter = BlockInput.blockLetters.get(blockIndex);
+
+        // coba setiap posisi dan rotasi 3D
+        for (int rotation = 0; rotation < 8; rotation++) {
+            List<int[]> rotatedBlock = Rotate.RotateBlocksBy45(currentBlock, rotation);
+
+            for (int bottomStack = 0; bottomStack < pyramid.stacks; bottomStack++) {
+                for (int endStack = bottomStack; endStack < pyramid.stacks; endStack++) {
+                    for (int x = 0; x < pyramid.pyramid[bottomStack].length; x++) {
+                        for (int y = 0; y < pyramid.pyramid[bottomStack][x].length; y++) {
+                            iterations++;
+                            if (pyramid.BlockFitCheckPyramid(bottomStack, endStack, x, y, rotatedBlock)) {
+                                pyramid.addBlockPyramid(bottomStack, endStack, x, y, rotatedBlock, currentLetter);
+                                solvePuzzlePyramid(blockIndex + 1);
+
+                                if (puzzleSolved) {
+                                    return;
+                                }
+                                // Backtrack
+                                pyramid.eraseBlockPyramid(bottomStack, x, y, rotatedBlock);
+                            }
+                        }
                     }
                 }
             }

@@ -8,6 +8,7 @@ public class BlockInput {
     public static int M;
     public static int N;
     public static int P;
+    public static String Type;
     public static List<Character> blockLetters = new ArrayList<>();
 
     private static String[] COLORS = {
@@ -64,9 +65,9 @@ public class BlockInput {
 
             // Baca tipe
             if (fileScanner.hasNextLine()) {
-                String type = fileScanner.nextLine().trim().toUpperCase();
-                if (!"DEFAULT".equals(type)) {
-                    System.out.println("Error: Tipe harus merupakan 'DEFAULT'.");
+                Type = fileScanner.nextLine().trim().toUpperCase();
+                if (!"DEFAULT".equals(Type) && !"PYRAMID".equals(Type)) {
+                    System.out.println("Error: Tipe harus merupakan 'DEFAULT' atau 'PYRAMID'.");
                     return null;
                 }
             } else {

@@ -1,7 +1,6 @@
 import java.util.List;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Map;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
@@ -73,7 +72,7 @@ public class TransformMatrix {
         return "\u001B[38;2;" + getRGBFromHex(colorCode) + "m" + text + "\u001B[0m";
     }
 
-    private static String getRGBFromHex(String hex) {
+    public static String getRGBFromHex(String hex) {
         int r = Integer.valueOf(hex.substring(1, 3), 16);
         int g = Integer.valueOf(hex.substring(3, 5), 16);
         int b = Integer.valueOf(hex.substring(5, 7), 16);
