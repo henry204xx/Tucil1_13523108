@@ -71,7 +71,7 @@ public class Pyramid {
 
 
     public void printPyramid() {
-        for (int stack = 0; stack < stacks; stack++) {
+        for (int stack = stacks-1; stack >=0; stack--) {
             for (int i = 0; i < pyramid[stack].length; i++) {
                 for (int j = 0; j < pyramid[stack][i].length; j++) {
                     char cell = pyramid[stack][i][j];
