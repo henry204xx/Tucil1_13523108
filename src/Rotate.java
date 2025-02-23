@@ -96,7 +96,7 @@ public class Rotate {
 
         double angle = Math.toRadians(rotation * 45);
 
-        // Apply the rotation around X, Y, Z axes
+        
         for (int[] coord : block) {
             int x = coord[0];
             int y = coord[1];
