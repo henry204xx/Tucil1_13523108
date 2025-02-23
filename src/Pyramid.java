@@ -1,9 +1,9 @@
-import java.util.List;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 import javax.imageio.ImageIO;
 
 public class Pyramid {
@@ -105,7 +105,7 @@ public class Pyramid {
     public void savePyramidMatrix(String filename, boolean solutionFound) {
         try (FileWriter writer = new FileWriter(filename)) {
             if (solutionFound) {
-                for (int stack = 0; stack < stacks; stack++) { 
+                for (int stack = stacks-1; stack >=0; stack--) { 
                     for (int row = 0; row < pyramid[stack].length; row++) {
                         for (int col = 0; col < pyramid[stack][row].length; col++) {
                             char elmt = pyramid[stack][row][col];
@@ -149,7 +149,7 @@ public class Pyramid {
 
         int Y = 0; 
 
-        for (int stack = 0; stack < stacks; stack++) {
+        for (int stack = stacks-1; stack >= 0; stack--) {
             int rows = pyramid[stack].length;
             int cols = pyramid[stack][0].length;
 

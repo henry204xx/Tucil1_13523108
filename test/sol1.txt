@@ -1,6 +1,6 @@
+F
+CC
+EE
 ABB
 AAF
 DDD
-CC
-EE
-F
