@@ -67,13 +67,14 @@ Cara untuk menjalankan program
     - **M, N** = dimensi papan MxN  
     - **P** = jumlah blok yang digunakan  
     - **S** = Tipe papan (DEFAULT/PYRAMID)  
-    - **block_P** =  blok dari rangkaian huruf A-Z
+    - **block_P_SHAPE** =  blok dari rangkaian huruf A-Z
     
 ## Features
 
 Program ini dapat
 1. Menyelesaikan permainan IQ Puzzler Pro pada papan 2D berukuran MxN.
 2. Menyelesaikan permainan IQ Puzzler Pro membangun piramida 3D.
+3. Menyimpan solusi dari permainan sebagai file teks maupun gambar.
 
 
 ## Created by
